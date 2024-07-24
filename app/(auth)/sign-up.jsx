@@ -1,67 +1,96 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import FormField from '../components/FormField';
-import CustomButton from '../components/CustomButton';
+import { StatusBar } from "expo-status-bar";
+import { router } from "expo-router";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { images } from "../../constants";
+import CustomButton from "../../components/CustomButton";
+import FormField from "../../components/FormField";
 
 const SignUp = () => {
-  const [username, setUsername] = useState('');
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigation = useNavigation();
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = async () => {
-    if (!username || !email || !password) {
-      Alert.alert('Error', 'Please fill in all fields');
-      return;
-    }
-
-    // Here you would typically call an API to register the user
-    // For now, we'll just simulate a successful registration
-    console.log('Signing up with:', { username, email, password });
-    Alert.alert('Success', 'Account created successfully', [
-      {
-        text: 'OK',
-        onPress: () => navigation.navigate('Tabs') // Navigate to tabs after successful signup
-      }
-    ]);
+  const handleSignUp = () => {
+    // Implement sign-up logic here
+    console.log('Sign up with:', fullName, email, password);
+    // If successful, navigate to the home screen or verification screen
+    // router.push('/tabs/home');
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-      <Text style={{ fontSize: 24, marginBottom: 20, textAlign: 'center' }}>Create Account</Text>
-      
-      <FormField
-        label="Username"
-        value={username}
-        onChangeText={setUsername}
-        placeholder="Choose a username"
-      />
+    <SafeAreaView className="bg-primary h-full">
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: 'center',
+          padding: 20,
+        }}
+      >
+        <View className="w-full flex items-center mb-8">
+          <Image
+            source={images.logo}
+            className="w-[130px] h-[84px]"
+            resizeMode="contain"
+          />
+        </View>
 
-      <FormField
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Enter your email"
-        keyboardType="email-address"
-      />
-      
-      <FormField
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Create a password"
-        secureTextEntry
-      />
-      
-      <CustomButton title="Sign Up" onPress={handleSignUp} />
-      
-      <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-        <Text style={{ marginTop: 20, textAlign: 'center' }}>
-          Already have an account? Sign In
+        <Text className="text-3xl text-white font-bold text-center mb-8">
+          Create Account
         </Text>
-      </TouchableOpacity>
-    </View>
+
+        <FormField
+          label="Full Name"
+          value={fullName}
+          onChangeText={setFullName}
+          placeholder="Enter your full name"
+        />
+
+        <FormField
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Enter your email"
+          keyboardType="email-address"
+        />
+
+        <FormField
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Create a password"
+          secureTextEntry
+        />
+
+        <FormField
+          label="Confirm Password"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholder="Confirm your password"
+          secureTextEntry
+        />
+
+        <CustomButton
+          title="Sign Up"
+          handlePress={handleSignUp}
+          containerStyles="w-full mt-6"
+        />
+
+        <TouchableOpacity
+          onPress={() => router.push('/sign-in')}
+          className="mt-4"
+        >
+          <Text className="text-white text-center">
+            Already have an account? Sign In
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+
+      <StatusBar backgroundColor="#161622" style="light" />
+    </SafeAreaView>
   );
 };
 
